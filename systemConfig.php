@@ -1,8 +1,10 @@
 <?php
 class systemConfig {
-  var $servername = "127.0.0.1";
-  var $username = "root";
-  var $password = '';
+  private $servername = "127.0.0.1";
+  private $username = "root";
+  private $password = '';
+  private $db_name = "favorite_songs";
+
   var $dbConnection;
 
   function __construct() {}
@@ -13,7 +15,7 @@ class systemConfig {
 
   // create connection to DB
   function connectDB () {
-    $this->dbConnection = new mysqli($this->servername, $this->username, $this->password);
+    $this->dbConnection = new mysqli($this->servername, $this->username, $this->password, $this->db_name);
     // check for any error occur and return DB connection
     if ($this->dbConnection->connect_errno) {
       die("Connection failed: " . $this->dbConnection->connect_errno); 
@@ -72,11 +74,13 @@ class systemConfig {
   }
     
 
-  function sendResponse ($status = 200, $body = "", $content_type = "text/html") {
+  function sendResponse ($status = 200, $body = "", $method = "GET", $content_type = "application/json; charset=UTF-8") {
     $status_header = "HTTP/1.1" . $status . ' ' . $this->getStatusCodeMessage($status);
     // set response header
+    header("Access-Control-Allow-Origin: *");
     header($status_header);
     header('Content-type: '. $content_type);
+    header("Access-Control-Allow-Methods: " . $method);
     echo $body;
   }
 }
