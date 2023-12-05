@@ -3,7 +3,16 @@
 
   $Song = new Song;
 
-  $$id = $_POST['$id'];
+  // Get the request URL
+  $requestUrl = $_SERVER['REQUEST_URI'];
+  // Parse the URL and extract the ID
+  $urlParts = parse_url($requestUrl);
+  $path = $urlParts['path'];
+  // Extract the ID from the path
+  $parts = explode('/', $path);
+  $id = end($parts);
+
+  // Access the data fields
   $name = $_POST['name'];
   $singer = $_POST['singer'];
   
